@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_reminders.*
  */
 class RemindersFragment : Fragment() {
 
+    private lateinit var reminderRepository: ReminderRepository
+
     private val reminders = arrayListOf<Reminder>()
     private val reminderAdapter = ReminderAdapter(reminders)
 
@@ -33,6 +35,16 @@ class RemindersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+
+        reminderRepository = ReminderRepository(requireContext())
+        getRemindersFromDatabase()
+    }
+
+    private fun getRemindersFromDatabase() {
+        val reminders = reminderRepository.getAllReminders()
+        this@RemindersFragment.reminders.clear()
+        this@RemindersFragment.reminders.addAll(reminders)
+        reminderAdapter.notifyDataSetChanged()
     }
 
     private fun initViews() {
